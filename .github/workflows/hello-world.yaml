@@ -14,10 +14,17 @@ on:
       - 'release/**'
       - 'staging/**'
       - '!develop/**'
+  pull_request:
+    types: [opened, reopened, synchronize, labeled, unlabeled]
   workflow_dispatch:
 jobs:
   say-hello:
     runs-on: ubuntu-latest
     steps:
+      - uses: mheap/github-action-required-labels@v1
+        with:
+          mode: exactly
+          count: 0
+          labels: "don't run build"
       - run: echo "TODAY='02/08/2023'" >> $GITHUB_ENV
       - run: echo Hello world, today is $TODAY
