@@ -17,5 +17,9 @@ jobs:
       - run: npm install
       # Ta lấy nó từ trên marketplace của github: Jest coverage report sau đó coi hướng dẫn sử dụng và import vào
       - uses: ArtiomTr/jest-coverage-report-action@v2
+        with:
+          github-token: ${{ secrets.SECRET_TOKEN }}
+          threshold: 90
+          skip-step: install
 
 
