@@ -1,0 +1,319 @@
+++++++++++++++++++++ One/Two way binding ++++++++++++++++++++
+<h1 class="text-center text-green-500 text-2xl uppercase font-bold">{{name}}</h1>
+
+<div class="form-group">
+  <label for="">Your name (data-binding-one-way):</label>
+  <input type="text" placeholder="Enter your name:" [ngModel]="name" class="form-control" />
+</div>
+
+<div class="form-group">
+  <label for="">Your name (data-binding-two-way):</label>
+  <input type="text" placeholder="Enter your name:" [(ngModel)]="name" class="form-control" />
+</div>
+
+<!-- One way binding: [ngModel]     (Chỉ lấy và xem data) -->
+<!-- Two way binding: [(ngModel)]   (Vừa xem vừa sửa được) -->
+------------------------------------------------------------------------------------------------------------------
+
+++++++++++++++++++++ Template reference variables ++++++++++++++++++++
+<div class="form-group flex flex-col gap-4">
+  <label for="">Template reference variables:</label>
+  <!--
+    Sử dụng Template reference variables tham chiếu đến 1 phần tử dom hoặc directive trong template
+    Cách 1: #txtName
+    Cách 2: ref-txtName
+  -->
+  <input type="text" class="form-control" placeholder="Enter your name:" ref-txtName />
+  <button type="button" (click)="onHandleGetData()">Get Data</button>
+</div>
+------------------------------------------------------------------------------------------------------------------
+
+++++++++++++++++++++ Binding ++++++++++++++++++++
+<div class="container">
+  <!-- Data binding (Interpolation: {{ value }}) -->
+  <div class="row">
+    <div class="col-12">
+        <p>{{ user.name }}</p>
+        <p>{{ user.age }}</p>
+        <p>{{ user.gender ? 'Nam' : 'Nữ' }}</p>
+        <p>{{ user.isMarried ? 'Đã kết hôn' : 'Độc thân' }}</p>
+        <p>{{ user.address }}</p>
+        <p>{{ showInfo() }}</p>
+        <img width="300" height="300" src="{{user.image}}" alt="{{user.name}}">
+    </div>
+  </div>
+
+  <!-- Property binding ([property-name] = "value") -->
+  <div class="row mt-5">
+    <div class="col-12">
+      <img [width]="dataImage.width" [height]="dataImage.height" [src]="dataImage.imageSrc" [alt]="dataImage.imageAlt">
+    </div>
+  </div>
+
+  <!-- Attribute binding ([attr.attribute_name] = "value") -->
+  <div class="row mt-5">
+    <div class="col-12">
+      <img [attr.width]="dataImage.width" [attr.height]="dataImage.height" [attr.src]="dataImage.imageSrc" [attr.alt]="dataImage.imageAlt">
+    </div>
+  </div>
+
+  <!-- Class binding -->
+  <div
+  [class.uppercase]="isHaveClass"
+  [class.lowercase]="!isHaveClass"
+  >
+    <p>Nguyễn Trung Kiên Và Mai Thị Thanh Thúy</p>
+  </div>
+
+  <!-- Style binding -->
+  <div
+  [style.color]="isHaveStyle ? 'yellow' : 'red'"
+  [style.text-transform]="isHaveStyle ? 'uppercase' : 'lowercase'"
+  [style.font-size.px]="isHaveStyle ? '30' : '50'"
+  >
+    <p>Nguyễn Trung Kiên Và Mai Thị Thanh Thúy</p>
+  </div>
+</div>
+------------------------------------------------------------------------------------------------------------------
+
+++++++++++++++++++++ ng-template và ng-container ++++++++++++++++++++
+- ng-template và ng-container đều không hề chiếm diện tích (không hề ảnh hưởng đến cấu trúc giao diện html)
+- ng-template dùng để định nghĩa mẫu (template) không hiển thị trong DOM và thường được sử dụng để hiển thị nội dung HTML.
+- ng-container dùng để nhóm các phần tử HTML mà không tạo thêm yếu tố trong DOM và thường được sử dụng khi không muốn thay đổi cấu trúc 
+DOM khi sử dụng ngIf hoặc ngFor.
+<!--
+  Nếu mà isChecked là true thì tham chiếu đến cục template checkedBlock,
+  ngược lại nếu mà isChecked là false thì tham chiếu đến cục uncheckedBlock.
+  Sau đó hiển thị nội dung trong cục ng-template đó ra
+-->
+<ng-container *ngIf="isChecked; then checkedBlock else uncheckedBlock"></ng-container>
+
+<ng-template #checkedBlock>
+  <h3 class="uppercase text-green-400">Nguyễn Trung Kiên và Mai Thị Thanh Thúy (Checked)</h3>
+</ng-template>
+<ng-template #uncheckedBlock>
+  <h3 class="uppercase text-blue-400">Nguyễn Trung Kiên và Mai Thị Thanh Thúy (Unchecked)</h3>
+</ng-template>
+------------------------------------------------------------------------------------------------------------------
+
+++++++++++++++++++++ @Input và @Output truyền nhận dữ liệu giữa component con và component cha ++++++++++++++++++++
+                                              Component cha
+                                              home.component.ts
+-----------------------------------------------------------------------------
+import { Component, ViewChild, ElementRef } from '@angular/core';
+
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss']
+})
+export class HomeComponent {
+
+  // Data Binding
+  public user = {
+    name: 'Mai Thị Thanh Thúy',
+    age: 23,
+    gender: false,
+    isMarried: false,
+    address: 'Bà Rịa Vũng Tàu',
+    image: 'https://image-us.24h.com.vn/upload/3-2023/images/2023-07-11/anh-1-1689066226-471-width650height883.jpg'
+  };
+
+  // Property - Attribute Binding
+  public dataImage = {
+    width: "300",
+    height: "300",
+    imageSrc: 'https://huyhoangblog.com/wp-content/uploads/2021/09/hinh-anh-gai-xinh-25.jpg',
+    imageAlt: 'Hình ảnh gái xin'
+  };
+
+  // Class/Style binding
+  public isHaveClass: boolean = true;
+  public isHaveStyle: boolean = true;
+
+  // One/Two way binding
+  public name: string = 'Nguyễn Trung Kiên';
+
+  // Template reference variables
+  // Tham chiếu đến ref txtName
+  @ViewChild('txtName') dataName: ElementRef = new ElementRef(null);
+
+  onHandleGetData(): void {
+    console.log('value: ', this.dataName.nativeElement.value);
+    console.log('className: ', this.dataName.nativeElement.className);
+  };
+
+  showInfo() {
+    return `Xin chào tôi tên là ${this.user.name}.
+    Năm nay ${this.user.age} tuổi.
+    Tôi là ${this.user.gender ? 'Nam' : 'Nữ'}.
+    Tôi đến từ ${this.user.address}.
+    Tôi hiện tại đang trong trạng thái ${this.user.isMarried ? 'Đã kết hôn' : 'Độc thân'}`
+  };
+
+  // *ngIf
+  public isChecked: boolean = true;
+
+  public boyData = {
+    name: 'Nguyễn Trung Kiên',
+    age: 23,
+    gender: true,
+    address: 'Thành phố Hồ Chí Minh',
+    phone: '0981284476'
+  };
+
+  public girlData = {
+    name: 'Mai Thị Thanh Thúy',
+    age: 23,
+    gender: false,
+    address: 'Bà Rịa Vũng Tàu',
+    phone: '0969776816'
+  };
+
+  // Nhận dữ liệu truyền từ component con (child) lên component cha (home)
+  public txtName: string = '';
+  public txtAge: number = 0;
+  public txtGender: number = 0;
+
+  GetName(value: string){
+    this.txtName = value;
+  }
+
+  GetAge(value: number){
+    this.txtAge = value;
+  }
+
+  GetGender(value: number){
+    this.txtGender = value;
+  }
+}
+-----------------------------------------------------------------------------
+                                              Component cha
+                                              home.component.html
+-----------------------------------------------------------------------------
+<!-- Hiển thị data từ component con (child) truyền lên component cha (home) (key)="function()" -->
+<h1>Tôi tên là: {{txtName}}. Tôi {{txtAge}} tuổi. Giới tính của tôi là {{txtGender === 1 ? 'Nam' : 'Nữ'}}</h1>
+<!-- Lúc nhận data từ component con truyền lên thì phải luôn luôn nhận về cái $event (Bắt buộc phải đặt tên là: $event) -->
+<!-- Truyền dữ liệu từ component cha (home) vào component con (child) dùng cặp ngoặc vuông [key]="value" -->
+<app-child [boyData]="boyData" [girlData]="girlData" (txtName)="GetName($event)" (txtAge)="GetAge($event)" (txtGender)="GetGender($event)"></app-child>
+-----------------------------------------------------------------------------
+                                              Component con
+                                              child.component.ts
+-----------------------------------------------------------------------------
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+
+@Component({
+  selector: 'app-child',
+  templateUrl: './child.component.html',
+  styleUrls: ['./child.component.scss']
+})
+export class ChildComponent {
+  // ++++++++++++++++++++  component con nhận về các data được truyền từ component cha ++++++++++++++++++++
+  // Cách 1 boyData và girlData trong thẻ input là 2 key ta nhận về từ component cha.
+  // Còn boyData và girlData nằm ngoài thẻ @Input là ta tự đặt tên biến
+  @Input('boyData') boyData: any;
+  @Input('girlData') girlData: any;
+
+  // Cách 2 dùng getter setter theo kiểu hướng đối tượng OOP (Khuyến khích dùng cách 1)
+  // private _boyData: any;
+  // private _girlData: any;
+
+  // @Input()
+  // set boyData(boyData: any){
+  //   this._boyData = boyData;
+  // }
+
+  // get boyData(){
+  //   return this._boyData;
+  // }
+
+  // @Input()
+  // set girlData(girlData: any){
+  //   this._girlData = girlData;
+  // }
+
+  // get girlData(){
+  //   return this._girlData;
+  // }
+
+  // ++++++++++++++++++++ component con truyền dữ liệu lên component cha ++++++++++++++++++++
+  public txtName: string = '';
+  public txtAge: number = 0;
+  public txtGender: number = 0;
+
+  // EventEmitter dùng để phát sự kiện thông qua emit
+  // txtName, txtAge, txtGender là các biến dùng để lưu trữ và các biến này sẽ được truyền từ component con ra component cha
+  @Output('txtName') onHandleName = new EventEmitter<string>();
+  @Output('txtAge') onHandleAge = new EventEmitter<number>();
+  @Output('txtGender') onHandleGender = new EventEmitter<number>();
+
+  onSubmitForm() {
+    this.onHandleName.emit(this.txtName);
+    this.onHandleAge.emit(Number(this.txtAge));
+    this.onHandleGender.emit(Number(this.txtGender));
+  }
+}
+-----------------------------------------------------------------------------
+                                              Component con
+                                              child.component.html
+<!-- Nhận dữ liệu từ component cha về và hiển thị lên -->
+<!-- Cách 1 -->
+<!--
+<div>
+  <h3>Data About Boy</h3>
+  <p>Họ và tên: {{boyData.name}}</p>
+  <p>Tuổi: {{boyData.age}}</p>
+  <p>Giới tính: {{boyData.gender ? 'Nam' : 'Nữ'}}</p>
+  <p>Địa chỉ: {{boyData.address}}</p>
+  <p>Số điện thoại: {{boyData.phone}}</p>
+</div>
+
+<div>
+  <h3>Data About Girl</h3>
+  <p>Họ và tên: {{girlData.name}}</p>
+  <p>Tuổi: {{girlData.age}}</p>
+  <p>Giới tính: {{girlData.gender ? 'Nam' : 'Nữ'}}</p>
+  <p>Địa chỉ: {{girlData.address}}</p>
+  <p>Số điện thoại: {{girlData.phone}}</p>
+</div>
+-->
+
+<!-- Cách 2 -->
+<!--
+<div>
+  <h3>Data About Boy</h3>
+  <p>Họ và tên: {{boyData.name}}</p>
+  <p>Tuổi: {{boyData.age}}</p>
+  <p>Giới tính: {{boyData.gender ? 'Nam' : 'Nữ'}}</p>
+  <p>Địa chỉ: {{boyData.address}}</p>
+  <p>Số điện thoại: {{boyData.phone}}</p>
+</div>
+
+<div>
+  <h3>Data About Girl</h3>
+  <p>Họ và tên: {{girlData.name}}</p>
+  <p>Tuổi: {{girlData.age}}</p>
+  <p>Giới tính: {{girlData.gender ? 'Nam' : 'Nữ'}}</p>
+  <p>Địa chỉ: {{girlData.address}}</p>
+  <p>Số điện thoại: {{girlData.phone}}</p>
+</div>
+-->
+
+<!-- Đẩy dữ liệu lên component cha -->
+<form action="">
+  <div class="flex flex-col items-center justify-content-around gap-8">
+    <input type="text"   placeholder="Enter Your Name:" [(ngModel)]="txtName" [ngModelOptions]="{standalone: true}"/>
+    <input type="number" placeholder="Enter Your Age:"  [(ngModel)]="txtAge" [ngModelOptions]="{standalone: true}"/>
+    <select [(ngModel)]="txtGender" [ngModelOptions]="{standalone: true}">
+      <option value="0">Nữ</option>
+      <option value="1">Nam</option>
+    </select>
+
+    <button type="button" class="px-4 py-4 text-center uppercase text-green-500 font-bold border border-black rounded" (click)="onSubmitForm()">
+      Submit Form
+    </button>
+  </div>
+</form>
+
+
+

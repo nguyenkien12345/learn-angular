@@ -1,0 +1,5 @@
+<!-- Hiển thị data từ component con (child) truyền lên component cha (home) (key)="function()" -->
+<h1>Tôi tên là: {{txtName}}. Tôi {{txtAge}} tuổi. Giới tính của tôi là {{txtGender === 1 ? 'Nam' : 'Nữ'}}</h1>
+<!-- Lúc nhận data từ component con truyền lên thì phải luôn luôn nhận về cái $event (Bắt buộc phải đặt tên là: $event) -->
+<!-- Truyền dữ liệu từ component cha (home) vào component con (child) dùng cặp ngoặc vuông [key]="value" -->
+<app-child [boyData]="boyData" [girlData]="girlData" (txtName)="GetName($event)" (txtAge)="GetAge($event)" (txtGender)="GetGender($event)"></app-child>

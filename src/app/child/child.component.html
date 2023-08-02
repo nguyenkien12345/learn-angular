@@ -1,0 +1,59 @@
+<!-- Nhận dữ liệu từ component cha về và hiển thị lên -->
+<!-- Cách 1 -->
+<!--
+<div>
+  <h3>Data About Boy</h3>
+  <p>Họ và tên: {{boyData.name}}</p>
+  <p>Tuổi: {{boyData.age}}</p>
+  <p>Giới tính: {{boyData.gender ? 'Nam' : 'Nữ'}}</p>
+  <p>Địa chỉ: {{boyData.address}}</p>
+  <p>Số điện thoại: {{boyData.phone}}</p>
+</div>
+
+<div>
+  <h3>Data About Girl</h3>
+  <p>Họ và tên: {{girlData.name}}</p>
+  <p>Tuổi: {{girlData.age}}</p>
+  <p>Giới tính: {{girlData.gender ? 'Nam' : 'Nữ'}}</p>
+  <p>Địa chỉ: {{girlData.address}}</p>
+  <p>Số điện thoại: {{girlData.phone}}</p>
+</div>
+-->
+
+<!-- Cách 2 -->
+<!--
+<div>
+  <h3>Data About Boy</h3>
+  <p>Họ và tên: {{boyData.name}}</p>
+  <p>Tuổi: {{boyData.age}}</p>
+  <p>Giới tính: {{boyData.gender ? 'Nam' : 'Nữ'}}</p>
+  <p>Địa chỉ: {{boyData.address}}</p>
+  <p>Số điện thoại: {{boyData.phone}}</p>
+</div>
+
+<div>
+  <h3>Data About Girl</h3>
+  <p>Họ và tên: {{girlData.name}}</p>
+  <p>Tuổi: {{girlData.age}}</p>
+  <p>Giới tính: {{girlData.gender ? 'Nam' : 'Nữ'}}</p>
+  <p>Địa chỉ: {{girlData.address}}</p>
+  <p>Số điện thoại: {{girlData.phone}}</p>
+</div>
+-->
+
+<!-- Đẩy dữ liệu lên component cha -->
+<form action="">
+  <div class="flex flex-col items-center justify-content-around gap-8">
+    <input type="text"   placeholder="Enter Your Name:" [(ngModel)]="txtName" [ngModelOptions]="{standalone: true}"/>
+    <input type="number" placeholder="Enter Your Age:"  [(ngModel)]="txtAge" [ngModelOptions]="{standalone: true}"/>
+    <select [(ngModel)]="txtGender" [ngModelOptions]="{standalone: true}">
+      <option value="0">Nữ</option>
+      <option value="1">Nam</option>
+    </select>
+
+    <button type="button" class="px-4 py-4 text-center uppercase text-green-500 font-bold border border-black rounded" (click)="onSubmitForm()">
+      Submit Form
+    </button>
+  </div>
+</form>
+
