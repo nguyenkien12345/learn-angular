@@ -2,5 +2,20 @@ name: coverage
 on:
   push:
     branches: [master]
+  pull_request:
+    types: [opened, reopened, synchronize, labeled, unlabeled]
   workflow_dispatch:
 jobs:
+  # Đặt tên cho cái job
+  Coverage-report:
+    runs-on: windows-latest
+    steps:
+      # Để chạy được unit test thì workflow của mình cần phải download cái source code về
+      # (Luôn luôn dùng lệnh này: - uses: actions/checkout@v3)
+      # (Nó sẽ luôn luôn download code mới nhất từ nhánh mà chúng ta cho phép chạy về)
+      - uses: actions/checkout@v3
+      - run: npm install
+      # Ta lấy nó từ trên marketplace của github: Jest coverage report sau đó coi hướng dẫn sử dụng và import vào
+      - uses: ArtiomTr/jest-coverage-report-action@v2
+
+
