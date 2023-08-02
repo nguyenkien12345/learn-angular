@@ -12,13 +12,13 @@ jobs:
     steps:
       # Để chạy được unit test thì workflow của mình cần phải download cái source code về
       # (Luôn luôn dùng lệnh này: - uses: actions/checkout@v3)
-      # (Nó sẽ luôn luôn download code mới nhất từ nhánh mà chúng ta cho phép chạy về)
+      # (Nó sẽ luôn luôn download code mới nhất từ nhánh mà chúng ta cho phép)
       - uses: actions/checkout@v3
       - run: npm install
-      # Ta lấy nó từ trên marketplace của github: Jest coverage report sau đó coi hướng dẫn sử dụng và import vào
+      # Khi ta dùng từ khóa uses nghĩa là mình muốn sử dụng 1 action nào đó từ bên ngoài chứ không phải bên trong workflow này
       - uses: ArtiomTr/jest-coverage-report-action@v2
         with:
-          github-token: ${{ secrets.SECRET_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           threshold: 90
           skip-step: install
 
