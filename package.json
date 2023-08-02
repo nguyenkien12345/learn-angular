@@ -2,7 +2,7 @@
   "name": "learn-angular",
   "version": "0.0.0",
   "author": "Nguyễn Trung Kiên",
-  "description": "Learn Angular",
+  "description": "Learn Angular Latest",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
