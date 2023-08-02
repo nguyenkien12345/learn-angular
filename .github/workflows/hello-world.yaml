@@ -1,7 +1,16 @@
 name: hello world
 on:
   push:
-    branches: [master]
+    path:
+      - '!note.txt'
+      - '!README.md'
+      - '!.vscode/**'
+      - '!.editorconfig'
+    branches:
+      - 'master'
+      - 'release/**'
+      - 'staging/**'
+      - '!develop/**'
 jobs:
   say-hello:
     runs-on: ubuntu-latest
